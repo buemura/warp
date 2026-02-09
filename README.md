@@ -10,6 +10,8 @@ Warp is a secure temporary file storage service. Upload files and get short, sha
 - **TTL expiration** — set an expiry time (5min to 24h) after which the link stops working
 - **Short shareable links** — unique 8-character IDs (like a URL shortener)
 - **Copy to clipboard** — one-click link sharing
+- **Rate limiting** — IP-based rate limits to prevent abuse (configurable per endpoint)
+- **IP tracking** — uploader IP address is stored with file metadata
 
 ## Tech Stack
 
@@ -19,6 +21,7 @@ Warp is a secure temporary file storage service. Upload files and get short, sha
 - **Alembic** for database migrations
 - **bcrypt** for password hashing
 - **nanoid** for short ID generation
+- **slowapi** for IP-based rate limiting
 - **pytest** for testing
 
 ### Frontend (`apps/web`)
@@ -127,6 +130,11 @@ pnpm test
 | `UPLOAD_DIR` | `./uploads` | Directory for uploaded files |
 | `MAX_FILE_SIZE` | `52428800` | Max upload size in bytes (50 MB) |
 | `FRONTEND_URL` | `http://localhost:5173` | Frontend origin for CORS |
+| `RATE_LIMIT_UPLOAD` | `5/minute` | Rate limit for file uploads |
+| `RATE_LIMIT_FILE_INFO` | `30/minute` | Rate limit for file info requests |
+| `RATE_LIMIT_ACCESS` | `10/minute` | Rate limit for file downloads |
+| `RATE_LIMIT_DEFAULT` | `60/minute` | Default rate limit for all endpoints |
+| `RATE_LIMIT_ENABLED` | `true` | Enable/disable rate limiting |
 
 ## Makefile Commands
 
