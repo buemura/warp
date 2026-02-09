@@ -26,29 +26,29 @@ export function FileDropZone({
       {...getRootProps()}
       className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
         isDragActive
-          ? "border-indigo-500 bg-indigo-50"
+          ? "border-indigo-500 bg-indigo-500/10"
           : selectedFile
-            ? "border-green-400 bg-green-50"
-            : "border-gray-300 hover:border-gray-400 bg-gray-50"
+            ? "border-green-500 bg-green-500/10"
+            : "border-gray-600 hover:border-gray-500 bg-gray-800/50"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       <input {...getInputProps()} />
       {selectedFile ? (
         <div>
-          <p className="text-green-700 font-medium">{selectedFile.name}</p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-green-400 font-medium">{selectedFile.name}</p>
+          <p className="text-sm text-gray-400 mt-1">
             {(selectedFile.size / 1024).toFixed(1)} KB — Click or drop to
             replace
           </p>
         </div>
       ) : isDragActive ? (
-        <p className="text-indigo-600 font-medium">Drop your file here...</p>
+        <p className="text-indigo-400 font-medium">Drop your file here...</p>
       ) : (
         <div>
-          <p className="text-gray-600">
+          <p className="text-gray-300">
             Drag and drop a file here, or click to select
           </p>
-          <p className="text-sm text-gray-400 mt-1">Max 50 MB</p>
+          <p className="text-sm text-gray-500 mt-1">Max 50 MB</p>
         </div>
       )}
     </div>

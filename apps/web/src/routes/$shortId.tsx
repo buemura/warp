@@ -50,17 +50,17 @@ function FileAccessPage() {
 
   if (loading) {
     return (
-      <div className="text-center py-20 text-gray-500">Loading...</div>
+      <div className="text-center py-20 text-gray-400">Loading...</div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 text-center space-y-4">
-        <p className="text-red-600 font-medium">{error}</p>
+      <div className="max-w-md mx-auto bg-gray-800/50 rounded-xl shadow-lg p-8 text-center space-y-4 border border-gray-700">
+        <p className="text-red-400 font-medium">{error}</p>
         <Link
           to="/"
-          className="inline-block text-indigo-600 hover:text-indigo-700 text-sm"
+          className="inline-block text-indigo-400 hover:text-indigo-300 text-sm"
         >
           Go to homepage
         </Link>
@@ -72,12 +72,12 @@ function FileAccessPage() {
 
   if (info.is_expired) {
     return (
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 text-center space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900">File Expired</h2>
-        <p className="text-gray-500">This file is no longer available. The link has expired.</p>
+      <div className="max-w-md mx-auto bg-gray-800/50 rounded-xl shadow-lg p-8 text-center space-y-4 border border-gray-700">
+        <h2 className="text-xl font-semibold text-gray-100">File Expired</h2>
+        <p className="text-gray-400">This file is no longer available. The link has expired.</p>
         <Link
           to="/"
-          className="inline-block text-indigo-600 hover:text-indigo-700 text-sm"
+          className="inline-block text-indigo-400 hover:text-indigo-300 text-sm"
         >
           Go to homepage
         </Link>
@@ -87,17 +87,17 @@ function FileAccessPage() {
 
   if (info.is_access_exhausted) {
     return (
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 text-center space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900">
+      <div className="max-w-md mx-auto bg-gray-800/50 rounded-xl shadow-lg p-8 text-center space-y-4 border border-gray-700">
+        <h2 className="text-xl font-semibold text-gray-100">
           Access Limit Reached
         </h2>
-        <p className="text-gray-500">
+        <p className="text-gray-400">
           This file has reached its maximum number of accesses and is no longer
           available.
         </p>
         <Link
           to="/"
-          className="inline-block text-indigo-600 hover:text-indigo-700 text-sm"
+          className="inline-block text-indigo-400 hover:text-indigo-300 text-sm"
         >
           Go to homepage
         </Link>
@@ -117,27 +117,27 @@ function FileAccessPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 text-center space-y-4">
-      <h2 className="text-xl font-semibold text-gray-900">
+    <div className="max-w-md mx-auto bg-gray-800/50 rounded-xl shadow-lg p-8 text-center space-y-4 border border-gray-700">
+      <h2 className="text-xl font-semibold text-gray-100">
         {info.original_filename}
       </h2>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-400">
         {(info.file_size / 1024).toFixed(1)} KB &middot; {info.content_type}
       </p>
       {info.expires_at && (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-gray-500">
           Expires: {new Date(info.expires_at).toLocaleString()}
         </p>
       )}
 
       {accessError && (
-        <p className="text-red-600 text-sm">{accessError}</p>
+        <p className="text-red-400 text-sm">{accessError}</p>
       )}
 
       <button
         onClick={() => handleDownload()}
         disabled={downloading}
-        className="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+        className="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors"
       >
         {downloading ? "Downloading..." : "Download"}
       </button>

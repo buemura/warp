@@ -32,25 +32,25 @@ Warp is a secure temporary file storage service. Upload files and get short, sha
 ## Project Structure
 
 ```
-warp/
+├── docker-compose.yml         # PostgreSQL service
 ├── apps/
-│   ├── api/                    # Backend (FastAPI)
+│   ├── api/                   # Backend (FastAPI)
 │   │   ├── app/
-│   │   │   ├── main.py         # App entrypoint
-│   │   │   ├── config.py       # Settings
-│   │   │   ├── database.py     # DB engine & session
-│   │   │   ├── models.py       # FileMetadata model
-│   │   │   ├── schemas.py      # Request/response schemas
-│   │   │   ├── routers/        # API endpoints
-│   │   │   ├── services/       # Business logic & storage
-│   │   │   └── utils/          # Password hashing
-│   │   └── tests/              # Backend tests
-│   └── web/                    # Frontend (React + Vite)
+│   │   │   ├── main.py        # App entrypoint
+│   │   │   ├── models.py      # FileMetadata model
+│   │   │   ├── schemas.py     # Request/response schemas
+│   │   │   ├── routers/       # API endpoints
+│   │   │   ├── services/      # Business logic & storage
+│   │   │   └── shared/        # Config, database & security
+│   │   ├── alembic/           # Database migrations
+│   │   ├── tests/             # Backend tests
+│   │   └── Makefile           # Dev commands
+│   └── web/                   # Frontend (React + Vite)
 │       ├── src/
-│       │   ├── routes/         # TanStack Router pages
-│       │   ├── components/     # React components
-│       │   └── lib/            # API client
-│       └── tests/              # Frontend tests
+│       │   ├── routes/        # TanStack Router pages
+│       │   ├── components/    # React components
+│       │   └── lib/           # API client
+│       └── tests/             # Frontend tests
 ```
 
 ## Getting Started
@@ -60,21 +60,30 @@ warp/
 - Python 3.12+
 - Node.js 18+
 - pnpm
-- PostgreSQL
+- Docker (for PostgreSQL)
+
+### Database
+
+```bash
+docker compose up -d
+```
+
+This starts a PostgreSQL 16 instance on port 5432 with database `warp`.
 
 ### Backend
 
 ```bash
 cd apps/api
+cp .env.example .env
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 
 # Run database migrations
-alembic upgrade head
+make migrate
 
 # Run the server
-uvicorn app.main:app --reload
+make dev
 ```
 
 The API will be available at `http://localhost:8000`.
@@ -98,7 +107,7 @@ The app will be available at `http://localhost:5173`. The Vite dev server proxie
 ```bash
 cd apps/api
 source .venv/bin/activate
-pytest -v
+make test
 ```
 
 ### Frontend tests
@@ -108,20 +117,30 @@ cd apps/web
 pnpm test
 ```
 
-## Database Migrations
+## Environment Variables
 
-Migrations are managed with Alembic. From the `apps/api` directory:
+### Backend (`apps/api/.env`)
 
-```bash
-# Apply all pending migrations
-alembic upgrade head
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/warp` | PostgreSQL connection string |
+| `UPLOAD_DIR` | `./uploads` | Directory for uploaded files |
+| `MAX_FILE_SIZE` | `52428800` | Max upload size in bytes (50 MB) |
+| `FRONTEND_URL` | `http://localhost:5173` | Frontend origin for CORS |
 
-# Create a new migration after changing models
-alembic revision --autogenerate -m "description of change"
+## Makefile Commands
 
-# Rollback one migration
-alembic downgrade -1
-```
+From the `apps/api` directory:
+
+| Command | Description |
+|---------|-------------|
+| `make install` | Install dependencies |
+| `make dev` | Start dev server with auto-reload |
+| `make test` | Run tests |
+| `make migrate` | Apply all pending migrations |
+| `make migrate-create` | Create a new migration |
+| `make migrate-down` | Rollback one migration |
+| `make migrate-reset` | Reset all migrations |
 
 ## API Endpoints
 
