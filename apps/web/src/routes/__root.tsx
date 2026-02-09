@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 to-gray-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-950 to-gray-900">
       <header className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <Link to="/" className="text-xl font-bold text-indigo-400">
@@ -17,9 +17,14 @@ function RootLayout() {
           </span>
         </div>
       </header>
-      <main className="max-w-3xl mx-auto px-4 py-10">
+      <main className="max-w-3xl mx-auto px-4 py-10 flex-1">
         <Outlet />
       </main>
+      <footer className="border-t border-gray-800 bg-gray-950/80 backdrop-blur-sm">
+        <div className="max-w-3xl mx-auto px-4 py-4 text-center text-sm text-gray-500">
+          &copy; {new Date().getFullYear()}. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
