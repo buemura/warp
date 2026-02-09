@@ -7,7 +7,6 @@ interface UploadFormProps {
 }
 
 const TTL_OPTIONS = [
-  { label: "No expiry", value: "" },
   { label: "5 minutes", value: "5" },
   { label: "15 minutes", value: "15" },
   { label: "30 minutes", value: "30" },
@@ -20,7 +19,7 @@ export function UploadForm({ onUploadComplete }: UploadFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
   const [oneTime, setOneTime] = useState(false);
-  const [ttl, setTtl] = useState("");
+  const [ttl, setTtl] = useState("5");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

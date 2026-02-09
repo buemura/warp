@@ -30,19 +30,17 @@ def upload_file(
     if file.size and file.size > settings.MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large.")
 
-    metadata = service.upload(
+    if ttl_minutes is not None and not (5 <= ttl_minutes <= 1440):
+        raise HTTPException(
+            status_code=422, detail="TTL must be between 5 and 1440 minutes."
+        )
+
+    return service.upload(
         file=file,
         password=password,
         one_time=one_time,
         ttl_minutes=ttl_minutes,
         ip_address=request.client.host if request.client else None,
-    )
-
-    return UploadResponse(
-        short_id=metadata.short_id,
-        url=f"/{metadata.short_id}",
-        original_filename=metadata.original_filename,
-        expires_at=metadata.expires_at,
     )
 
 

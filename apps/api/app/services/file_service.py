@@ -8,6 +8,7 @@ from sqlmodel import Session, select
 from app.models import FileMetadata
 from app.services.storage import LocalStorage
 from app.shared.security import hash_password, verify_password
+from app.schemas import UploadResponse
 
 SHORT_ID_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 SHORT_ID_SIZE = 8
@@ -25,7 +26,7 @@ class FileService:
         one_time: bool = False,
         ttl_minutes: int | None = None,
         ip_address: str | None = None,
-    ) -> FileMetadata:
+    ) -> UploadResponse:
         stored_filename = self.storage.save(file)
         file_path = self.storage.get_path(stored_filename)
         file_size = file_path.stat().st_size
@@ -49,7 +50,13 @@ class FileService:
         self.session.add(metadata)
         self.session.commit()
         self.session.refresh(metadata)
-        return metadata
+
+        return UploadResponse(
+            short_id=metadata.short_id,
+            url=f"/{metadata.short_id}",
+            original_filename=metadata.original_filename,
+            expires_at=metadata.expires_at,
+        )
 
     def get_metadata(self, short_id: str) -> FileMetadata | None:
         statement = select(FileMetadata).where(FileMetadata.short_id == short_id)
