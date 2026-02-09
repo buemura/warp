@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
 from sqlmodel import Session
 
 from app.shared.config import settings
 from app.shared.database import get_session
+from app.shared.limiter import limiter
 from app.schemas import AccessRequest, FileInfoResponse, UploadResponse
 from app.services.file_service import FileService
 from app.services.storage import LocalStorage
@@ -17,7 +18,9 @@ def get_file_service(session: Session = Depends(get_session)) -> FileService:
 
 
 @router.post("/upload", response_model=UploadResponse)
+@limiter.limit(settings.RATE_LIMIT_UPLOAD)
 def upload_file(
+    request: Request,
     file: UploadFile,
     password: str | None = Form(None),
     one_time: bool = Form(False),
@@ -32,6 +35,7 @@ def upload_file(
         password=password,
         one_time=one_time,
         ttl_minutes=ttl_minutes,
+        ip_address=request.client.host if request.client else None,
     )
 
     return UploadResponse(
@@ -43,7 +47,9 @@ def upload_file(
 
 
 @router.get("/{short_id}", response_model=FileInfoResponse)
+@limiter.limit(settings.RATE_LIMIT_FILE_INFO)
 def get_file_info(
+    request: Request,
     short_id: str,
     service: FileService = Depends(get_file_service),
 ) -> FileInfoResponse:
@@ -75,7 +81,9 @@ def get_file_info(
 
 
 @router.post("/{short_id}/access")
+@limiter.limit(settings.RATE_LIMIT_ACCESS)
 def access_file(
+    request: Request,
     short_id: str,
     body: AccessRequest | None = None,
     service: FileService = Depends(get_file_service),

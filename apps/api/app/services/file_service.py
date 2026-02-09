@@ -24,6 +24,7 @@ class FileService:
         password: str | None = None,
         one_time: bool = False,
         ttl_minutes: int | None = None,
+        ip_address: str | None = None,
     ) -> FileMetadata:
         stored_filename = self.storage.save(file)
         file_path = self.storage.get_path(stored_filename)
@@ -42,6 +43,7 @@ class FileService:
             password_hash=hash_password(password) if password else None,
             max_access_count=1 if one_time else None,
             expires_at=expires_at,
+            ip_address=ip_address,
         )
 
         self.session.add(metadata)

@@ -47,6 +47,10 @@ export async function uploadFile(
     body: formData,
   });
 
+  if (response.status === 429) {
+    throw new Error("Too many requests. Please wait a moment and try again.");
+  }
+
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: "Upload failed" }));
     throw new Error(error.detail ?? "Upload failed");
@@ -57,6 +61,10 @@ export async function uploadFile(
 
 export async function getFileInfo(shortId: string): Promise<FileInfoResponse> {
   const response = await fetch(`${API_BASE}/api/files/${shortId}`);
+
+  if (response.status === 429) {
+    throw new Error("Too many requests. Please wait a moment and try again.");
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: "File not found" }));
@@ -75,6 +83,10 @@ export async function accessFile(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password: password ?? null }),
   });
+
+  if (response.status === 429) {
+    throw new Error("Too many requests. Please wait a moment and try again.");
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: "Access denied" }));

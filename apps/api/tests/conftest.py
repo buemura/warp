@@ -1,3 +1,7 @@
+import os
+
+os.environ["RATE_LIMIT_ENABLED"] = "false"
+
 import tempfile
 from collections.abc import Generator
 
