@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   render,
-  screen,
   fireEvent,
   waitFor,
   cleanup,
@@ -46,9 +45,7 @@ describe("UploadForm", () => {
     const { container } = render(<UploadForm onUploadComplete={vi.fn()} />);
     const form = within(container);
 
-    expect(
-      form.getByText(/drag and drop a file here/i),
-    ).toBeInTheDocument();
+    expect(form.getByText(/drag and drop a file here/i)).toBeInTheDocument();
     expect(form.getByLabelText(/password protection/i)).toBeInTheDocument();
     expect(form.getByLabelText(/one-time access/i)).toBeInTheDocument();
     expect(form.getByLabelText(/expiration/i)).toBeInTheDocument();
@@ -63,9 +60,7 @@ describe("UploadForm", () => {
 
     const form = within(container);
     await waitFor(() => {
-      expect(
-        form.getByRole("button", { name: /upload/i }),
-      ).not.toBeDisabled();
+      expect(form.getByRole("button", { name: /upload/i })).not.toBeDisabled();
     });
   });
 
@@ -79,18 +74,14 @@ describe("UploadForm", () => {
     };
     mockUploadFile.mockResolvedValueOnce(mockResult);
 
-    const { container } = render(
-      <UploadForm onUploadComplete={onComplete} />,
-    );
+    const { container } = render(<UploadForm onUploadComplete={onComplete} />);
     const file = new File(["test"], "test.txt", { type: "text/plain" });
 
     dropFile(container, file);
 
     const form = within(container);
     await waitFor(() => {
-      expect(
-        form.getByRole("button", { name: /upload/i }),
-      ).not.toBeDisabled();
+      expect(form.getByRole("button", { name: /upload/i })).not.toBeDisabled();
     });
 
     fireEvent.click(form.getByRole("button", { name: /upload/i }));
@@ -103,18 +94,14 @@ describe("UploadForm", () => {
   it("shows error message on upload failure", async () => {
     mockUploadFile.mockRejectedValueOnce(new Error("Upload failed"));
 
-    const { container } = render(
-      <UploadForm onUploadComplete={vi.fn()} />,
-    );
+    const { container } = render(<UploadForm onUploadComplete={vi.fn()} />);
     const file = new File(["test"], "test.txt", { type: "text/plain" });
 
     dropFile(container, file);
 
     const form = within(container);
     await waitFor(() => {
-      expect(
-        form.getByRole("button", { name: /upload/i }),
-      ).not.toBeDisabled();
+      expect(form.getByRole("button", { name: /upload/i })).not.toBeDisabled();
     });
 
     fireEvent.click(form.getByRole("button", { name: /upload/i }));
