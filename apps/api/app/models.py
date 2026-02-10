@@ -18,3 +18,4 @@ class FileMetadata(SQLModel, table=True):
     expires_at: datetime | None = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     ip_address: str | None = Field(default=None)
+    removed_at: datetime | None = Field(default=None)

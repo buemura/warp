@@ -93,3 +93,24 @@ class FileService:
 
     def get_file_path(self, metadata: FileMetadata) -> Path:
         return self.storage.get_path(metadata.stored_filename)
+
+    def cleanup_expired(self) -> int:
+        now = datetime.now(timezone.utc)
+        statement = select(FileMetadata).where(
+            FileMetadata.expires_at.isnot(None),  # type: ignore[union-attr]
+            FileMetadata.expires_at <= now,  # type: ignore[operator]
+            FileMetadata.removed_at.is_(None),  # type: ignore[union-attr]
+        )
+        expired_files = self.session.exec(statement).all()
+
+        count = 0
+        for metadata in expired_files:
+            self.storage.delete(metadata.stored_filename)
+            metadata.removed_at = now
+            self.session.add(metadata)
+            count += 1
+
+        if count > 0:
+            self.session.commit()
+
+        return count

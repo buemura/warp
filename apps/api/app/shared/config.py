@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     RATE_LIMIT_DEFAULT: str = "60/minute"
     RATE_LIMIT_ENABLED: bool = True
 
+    CLEANUP_INTERVAL_SECONDS: int = 60
+
     model_config = {"env_file": ".env"}
 
 
