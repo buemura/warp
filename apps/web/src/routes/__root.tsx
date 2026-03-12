@@ -6,44 +6,91 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-linear-to-br from-gray-950 to-gray-900">
-      <header className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <Link
-            to="/"
-            className="text-xl font-bold text-indigo-400 inline-flex items-center gap-2"
+    <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          height: "56px",
+          padding: "0 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          background: "rgba(4, 4, 8, 0.88)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
+        <Link
+          to="/"
+          style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}
+        >
+          <WarpIcon />
+          <span
+            className="font-display"
+            style={{
+              fontSize: "1.45rem",
+              letterSpacing: "0.1em",
+              color: "var(--accent)",
+              lineHeight: 1,
+            }}
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 36 36"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill="#269"
-                d="M0 29a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V12a4 4 0 0 0-4-4h-9c-3.562 0-3-5-8.438-5H4a4 4 0 0 0-4 4v22z"
-              />
-              <path
-                fill="#818cf8"
-                d="M30 10h-6.562C18 10 18.562 15 15 15H6a4 4 0 0 0-4 4v10a1 1 0 1 1-2 0a4 4 0 0 0 4 4h26a4 4 0 0 0 4-4V14a4 4 0 0 0-4-4z"
-              />
-            </svg>
-            Warp
-          </Link>
-          <span className="text-sm text-gray-500 ml-2">
-            Secure temporary file storage
+            WARP
           </span>
-        </div>
+        </Link>
+        <span
+          style={{
+            fontSize: "10px",
+            color: "var(--text-2)",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            fontWeight: 600,
+          }}
+        >
+          Ephemeral Files
+        </span>
       </header>
-      <main className="max-w-3xl mx-auto px-4 py-10 flex-1">
+
+      <main
+        style={{
+          flex: 1,
+          width: "100%",
+          maxWidth: "480px",
+          margin: "0 auto",
+          padding: "28px 16px 52px",
+        }}
+      >
         <Outlet />
       </main>
-      <footer className="border-t border-gray-800 bg-gray-950/80 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto px-4 py-4 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()}. All rights reserved.
-        </div>
+
+      <footer
+        style={{
+          padding: "16px 20px",
+          textAlign: "center",
+          borderTop: "1px solid var(--border)",
+          fontSize: "11px",
+          color: "var(--text-2)",
+          letterSpacing: "0.06em",
+        }}
+      >
+        © {new Date().getFullYear()} WARP — Files that vanish.
       </footer>
     </div>
+  );
+}
+
+function WarpIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="#161622"
+        d="M0 29a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V12a4 4 0 0 0-4-4h-9c-3.562 0-3-5-8.438-5H4a4 4 0 0 0-4 4v22z"
+      />
+      <path
+        fill="#CAFF45"
+        d="M30 10h-6.562C18 10 18.562 15 15 15H6a4 4 0 0 0-4 4v10a1 1 0 1 1-2 0a4 4 0 0 0 4 4h26a4 4 0 0 0 4-4V14a4 4 0 0 0-4-4z"
+      />
+    </svg>
   );
 }

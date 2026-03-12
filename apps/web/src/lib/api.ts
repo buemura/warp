@@ -5,6 +5,7 @@ export interface UploadResponse {
   url: string;
   original_filename: string;
   expires_at: string | null;
+  file_count: number;
 }
 
 export interface FileInfoResponse {
@@ -26,11 +27,13 @@ export interface UploadOptions {
 }
 
 export async function uploadFile(
-  file: File,
+  files: File[],
   options: UploadOptions = {},
 ): Promise<UploadResponse> {
   const formData = new FormData();
-  formData.append("file", file);
+  for (const f of files) {
+    formData.append("files", f);
+  }
 
   if (options.password) {
     formData.append("password", options.password);

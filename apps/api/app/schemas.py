@@ -8,6 +8,7 @@ class UploadResponse(BaseModel):
     url: str
     original_filename: str
     expires_at: datetime | None
+    file_count: int = 1
 
 
 class FileInfoResponse(BaseModel):

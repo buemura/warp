@@ -22,7 +22,7 @@ describe("uploadFile", () => {
     });
 
     const file = new File(["hello"], "test.txt", { type: "text/plain" });
-    const result = await uploadFile(file);
+    const result = await uploadFile([file]);
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
     const [url, options] = mockFetch.mock.calls[0];
@@ -45,7 +45,7 @@ describe("uploadFile", () => {
     });
 
     const file = new File(["data"], "doc.pdf");
-    await uploadFile(file, {
+    await uploadFile([file], {
       password: "secret",
       oneTime: true,
       ttlMinutes: 60,
@@ -64,7 +64,7 @@ describe("uploadFile", () => {
     });
 
     const file = new File(["x"], "big.bin");
-    await expect(uploadFile(file)).rejects.toThrow("File too large.");
+    await expect(uploadFile([file])).rejects.toThrow("File too large.");
   });
 });
 

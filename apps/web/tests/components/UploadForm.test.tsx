@@ -71,6 +71,7 @@ describe("UploadForm", () => {
       url: "/abc123",
       original_filename: "test.txt",
       expires_at: null,
+      file_count: 1,
     };
     mockUploadFile.mockResolvedValueOnce(mockResult);
 

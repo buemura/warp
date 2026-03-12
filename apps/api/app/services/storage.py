@@ -19,6 +19,12 @@ class LocalStorage:
             shutil.copyfileobj(file.file, buffer)
         return stored_filename
 
+    def save_bytes(self, data: bytes, filename: str) -> str:
+        stored_filename = f"{uuid.uuid4().hex}_{filename}"
+        file_path = self.upload_dir / stored_filename
+        file_path.write_bytes(data)
+        return stored_filename
+
     def get_path(self, stored_filename: str) -> Path:
         return self.upload_dir / stored_filename
 

@@ -1,3 +1,5 @@
+import io
+import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -56,6 +58,62 @@ class FileService:
             url=f"/{metadata.short_id}",
             original_filename=metadata.original_filename,
             expires_at=metadata.expires_at,
+            file_count=1,
+        )
+
+    def upload_bundle(
+        self,
+        files: list[UploadFile],
+        password: str | None = None,
+        one_time: bool = False,
+        ttl_minutes: int | None = None,
+        ip_address: str | None = None,
+    ) -> UploadResponse:
+        if len(files) == 1:
+            return self.upload(
+                file=files[0],
+                password=password,
+                one_time=one_time,
+                ttl_minutes=ttl_minutes,
+                ip_address=ip_address,
+            )
+
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+            for f in files:
+                zf.writestr(f.filename or "unknown", f.file.read())
+        zip_bytes = buffer.getvalue()
+
+        n = len(files)
+        bundle_name = f"warp-bundle-{n}-files.zip"
+        stored_filename = self.storage.save_bytes(zip_bytes, bundle_name)
+
+        expires_at = None
+        if ttl_minutes is not None:
+            expires_at = datetime.now(timezone.utc) + timedelta(minutes=ttl_minutes)
+
+        metadata = FileMetadata(
+            short_id=generate(SHORT_ID_ALPHABET, SHORT_ID_SIZE),
+            original_filename=bundle_name,
+            stored_filename=stored_filename,
+            content_type="application/zip",
+            file_size=len(zip_bytes),
+            password_hash=hash_password(password) if password else None,
+            max_access_count=1 if one_time else None,
+            expires_at=expires_at,
+            ip_address=ip_address,
+        )
+
+        self.session.add(metadata)
+        self.session.commit()
+        self.session.refresh(metadata)
+
+        return UploadResponse(
+            short_id=metadata.short_id,
+            url=f"/{metadata.short_id}",
+            original_filename=metadata.original_filename,
+            expires_at=metadata.expires_at,
+            file_count=n,
         )
 
     def get_metadata(self, short_id: str) -> FileMetadata | None:

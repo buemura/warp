@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile
+from typing import List
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
 from sqlmodel import Session
 
@@ -21,22 +23,26 @@ def get_file_service(session: Session = Depends(get_session)) -> FileService:
 @limiter.limit(settings.RATE_LIMIT_UPLOAD)
 def upload_file(
     request: Request,
-    file: UploadFile,
+    files: List[UploadFile] = File(...),
     password: str | None = Form(None),
     one_time: bool = Form(False),
     ttl_minutes: int | None = Form(None),
     service: FileService = Depends(get_file_service),
 ) -> UploadResponse:
-    if file.size and file.size > settings.MAX_FILE_SIZE:
-        raise HTTPException(status_code=413, detail="File too large.")
+    if not files:
+        raise HTTPException(status_code=422, detail="No files provided.")
+
+    total_size = sum(f.size or 0 for f in files)
+    if total_size > settings.MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="Total file size too large.")
 
     if ttl_minutes is not None and not (5 <= ttl_minutes <= 1440):
         raise HTTPException(
             status_code=422, detail="TTL must be between 5 and 1440 minutes."
         )
 
-    return service.upload(
-        file=file,
+    return service.upload_bundle(
+        files=files,
         password=password,
         one_time=one_time,
         ttl_minutes=ttl_minutes,
