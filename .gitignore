@@ -7,9 +7,11 @@ __pycache__/
 *.db
 dist/
 
+# Next.js
+.next/
+out/
+
 # Uploads (keep directory, ignore contents)
-apps/api/uploads/*
-!apps/api/uploads/.gitkeep
 
 # Node
 node_modules/
