@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ detail: "Total file size too large." }, { status: 413 });
   }
 
-  if (ttlMinutes !== null && (ttlMinutes < 5 || ttlMinutes > 1440)) {
+  if (ttlMinutes !== null && (ttlMinutes < 15 || ttlMinutes > 1440)) {
     return NextResponse.json(
-      { detail: "TTL must be between 5 and 1440 minutes." },
+      { detail: "TTL must be between 15 and 1440 minutes." },
       { status: 422 }
     );
   }
