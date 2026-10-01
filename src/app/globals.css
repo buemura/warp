@@ -8,9 +8,9 @@
   --surface-2:    #111118;
   --border:       #1A1A28;
   --border-hi:    #262638;
-  --accent:       #CAFF45;
-  --accent-dim:   rgba(202, 255, 69, 0.07);
-  --accent-glow:  rgba(202, 255, 69, 0.18);
+  --accent:       #4DA3FF;
+  --accent-dim:   rgba(77, 163, 255, 0.07);
+  --accent-glow:  rgba(77, 163, 255, 0.18);
   --text:         #EFEFF5;
   --text-2:       #70708A;
   --error:        #FF5C5C;
@@ -28,7 +28,7 @@ html { font-size: 16px; }
 body {
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(202, 255, 69, 0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(77, 163, 255, 0.05) 0%, transparent 65%),
     radial-gradient(circle, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
   background-size: 100% 100%, 28px 28px;
   color: var(--text);
@@ -144,8 +144,8 @@ body {
 }
 
 .warp-toggle:checked {
-  background: rgba(202, 255, 69, 0.11);
-  border-color: rgba(202, 255, 69, 0.4);
+  background: rgba(77, 163, 255, 0.11);
+  border-color: rgba(77, 163, 255, 0.4);
 }
 
 .warp-toggle:checked::after {
@@ -239,7 +239,7 @@ body {
 
 .btn-ghost.copied {
   color: var(--accent);
-  border-color: rgba(202, 255, 69, 0.28);
+  border-color: rgba(77, 163, 255, 0.28);
   background: var(--accent-dim);
 }
 
@@ -256,8 +256,8 @@ body {
 }
 
 .dropzone:hover:not(.disabled) {
-  border-color: rgba(202, 255, 69, 0.28);
-  background: rgba(202, 255, 69, 0.025);
+  border-color: rgba(77, 163, 255, 0.28);
+  background: rgba(77, 163, 255, 0.025);
 }
 
 .dropzone.dragging {
@@ -280,7 +280,7 @@ body {
 
 @keyframes pulse-dashes {
   0%, 100% { border-color: var(--accent); }
-  50%       { border-color: rgba(202, 255, 69, 0.35); }
+  50%       { border-color: rgba(77, 163, 255, 0.35); }
 }
 
 /* ─── Warp Code display ──────────────── */
@@ -290,7 +290,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.32em;
   color: var(--accent);
-  text-shadow: 0 0 28px rgba(202, 255, 69, 0.22);
+  text-shadow: 0 0 28px rgba(77, 163, 255, 0.22);
   line-height: 1;
 }
 
@@ -304,7 +304,7 @@ body {
   height: 50px;
   border-radius: 13px;
   background: var(--accent-dim);
-  border: 1px solid rgba(202, 255, 69, 0.14);
+  border: 1px solid rgba(77, 163, 255, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;

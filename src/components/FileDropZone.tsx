@@ -115,7 +115,7 @@ function UploadIconBox({ active }: { active?: boolean }) {
         height: 56,
         borderRadius: 14,
         background: active ? "var(--accent-dim)" : "rgba(255,255,255,0.03)",
-        border: `1px solid ${active ? "rgba(202,255,69,0.3)" : "var(--border-hi)"}`,
+        border: `1px solid ${active ? "rgba(77, 163, 255,0.3)" : "var(--border-hi)"}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
