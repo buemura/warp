@@ -64,7 +64,11 @@ export default function HomePage() {
           <input
             type="text"
             value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            onChange={(e) => setCode(e.target.value)}
+            autoCapitalize="off"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
             placeholder="XXXXXXXX"
             className="warp-input font-mono"
             style={{ letterSpacing: "0.2em", fontSize: "16px" }}
